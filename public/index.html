@@ -330,18 +330,6 @@
         </aside>
       </div>
 
-      <section class="card" style="margin-top: 18px">
-        <h2>Embed Preview</h2>
-        <div class="help">
-          Once uploaded, use the link anywhere. For audio uploads we show a
-          simple player preview.
-        </div>
-        <div id="embedPreview" style="margin-top: 8px"></div>
-        <div class="actions">
-          <button class="btn ghost" id="copyEmbed" disabled>Copy Code</button>
-        </div>
-      </section>
-
       <footer>
         <div>
           Files are stored in Backblaze B2. Links are public. Please avoid
@@ -374,7 +362,6 @@
             Object.values(modes).forEach((m) => (m.hidden = true));
             state.currentMode = t.dataset.mode;
             modes[state.currentMode].hidden = false;
-            updateEmbed("");
             enableLinkActions(false);
             drawQR("https://example.com");
           })
@@ -463,7 +450,6 @@
         // --- After link available ---
         function afterLinkReady(url, meta) {
           drawQR(url);
-          updateEmbed(url, meta);
           enableLinkActions(true);
           status("Ready");
         }
@@ -484,26 +470,6 @@
           );
         }
 
-        function updateEmbed(url, meta = {}) {
-          const box = $("#embedPreview");
-          box.innerHTML = "";
-          if (!url) {
-            $("#copyEmbed").disabled = true;
-            return;
-          }
-          let html = "";
-          if (meta.kind === "audio") {
-            html = `<audio controls preload="metadata" style="width:100%"><source src="${url}" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
-          } else if (meta.kind === "image") {
-            html = `<img src="${url}" alt="QR asset" style="max-width:100%;height:auto;border-radius:12px;"/>`;
-          } else {
-            html = `<a href="${url}" target="_blank" rel="noopener">${url}</a>`;
-          }
-          box.innerHTML = html;
-          $("#copyEmbed").disabled = false;
-          $("#copyEmbed").dataset.code = html;
-        }
-
         function enableLinkActions(on) {
           $("#copyLink").disabled = !on;
           $("#openLink").disabled = !on;
@@ -513,8 +479,6 @@
         $("#copyLink").onclick = () => copy(state.link);
         $("#openLink").onclick = () =>
           window.open(state.link, "_blank", "noopener");
-        $("#copyEmbed").onclick = (e) =>
-          copy(e.currentTarget.dataset.code || "");
 
         $("#downloadPng").onclick = () => {
           const data = document
