@@ -1,0 +1,32 @@
+{
+  "name": "qr-generator",
+  "version": "1.0.0",
+  "description": "Simple QR Generator for Links, Images, and Audios",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devchollo/qr-generator.git"
+  },
+  "keywords": [
+    "QR",
+    "Generator"
+  ],
+  "author": "Kent Sevillejo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devchollo/qr-generator/issues"
+  },
+  "homepage": "https://github.com/devchollo/qr-generator#readme",
+  "dependencies": {
+    "backblaze-b2": "^1.7.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mime-types": "^3.0.1",
+    "multer": "^2.0.2"
+  }
+}
