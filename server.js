@@ -25,7 +25,7 @@ const b2 = new B2({
 });
 
 const B2_BUCKET_ID   = process.env.B2_BUCKET_ID2;
-const PUBLIC_BUCKET  = process.env.B2_PUBLIC_BUCKET2;
+const PUBLIC_BUCKET  = process.env.B2_BUCKET_NAME2;
 const PUBLIC_DOMAIN  = process.env.PUBLIC_DOMAIN2;
 
 async function ensureAuth() {
