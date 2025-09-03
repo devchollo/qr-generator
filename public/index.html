@@ -1,296 +1,574 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OneStop-Style QR Generator</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0f1115;
-      --panel: #151922;
-      --text: #e5e7eb;
-      --muted: #9aa3b2;
-      --accent: #7c3aed;
-      --accent-2: #22d3ee;
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-      --radius: 16px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b0d12 0%, #0f1115 40%, #0f1115 100%);color:var(--text);}
-    .wrap{max-width:980px;margin:0 auto;padding:40px 20px 80px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(90deg,var(--panel),#1b2130);border:1px solid #1f2636;border-radius:999px;color:var(--muted);font-size:12px}
-    .title{font-size:32px;font-weight:800;letter-spacing:.2px}
-    .subtitle{color:var(--muted);margin-top:2px}
-    .btn{cursor:pointer;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,#7c3aed,#6d28d9);border:none;color:white;padding:12px 16px;border-radius:12px;font-weight:600;box-shadow:var(--shadow);transition:.15s transform}
-    .btn:hover{transform:translateY(-1px)}
-    .ghost{background:transparent;border:1px solid #252a39;color:var(--text);box-shadow:none}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OneStop-Style QR Generator</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f1115;
+        --panel: #151922;
+        --text: #e5e7eb;
+        --muted: #9aa3b2;
+        --accent: #7c3aed;
+        --accent-2: #22d3ee;
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+        --radius: 16px;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial,
+          sans-serif;
+        background: linear-gradient(
+          180deg,
+          #0b0d12 0%,
+          #0f1115 40%,
+          #0f1115 100%
+        );
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: linear-gradient(90deg, var(--panel), #1b2130);
+        border: 1px solid #1f2636;
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .title {
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+      .subtitle {
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .btn {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(180deg, #7c3aed, #6d28d9);
+        border: none;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: var(--shadow);
+        transition: 0.15s transform;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .ghost {
+        background: transparent;
+        border: 1px solid #252a39;
+        color: var(--text);
+        box-shadow: none;
+      }
 
-    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
-    @media (max-width: 900px){.grid{grid-template-columns:1fr;}}
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    .card{background:linear-gradient(180deg,#121622,#0f1320);border:1px solid #1e2433;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
-    .card h2{margin:0 0 10px;font-size:18px}
-    .help{font-size:13px;color:var(--muted)}
+      .card {
+        background: linear-gradient(180deg, #121622, #0f1320);
+        border: 1px solid #1e2433;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+      .help {
+        font-size: 13px;
+        color: var(--muted);
+      }
 
-    .tabs{display:flex;gap:8px;margin:12px 0 14px}
-    .tab{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:12px;border:1px solid #22283a;background:#121726;color:#b9c0cf;cursor:pointer;font-weight:600}
-    .tab.active{background:linear-gradient(180deg,#1b2233,#151b2a);border-color:#27314a;color:#fff}
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin: 12px 0 14px;
+      }
+      .tab {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px solid #22283a;
+        background: #121726;
+        color: #b9c0cf;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .tab.active {
+        background: linear-gradient(180deg, #1b2233, #151b2a);
+        border-color: #27314a;
+        color: #fff;
+      }
 
-    .dropzone{margin-top:10px;border:2px dashed #26314a;border-radius:14px;padding:28px;text-align:center;background:rgba(30,42,70,.3)}
-    .dropzone.drag{border-color:var(--accent);background:rgba(124,58,237,.08)}
-    .dropzone input{display:none}
-    .dropzone .big{font-size:15px;font-weight:600}
-    .meta{margin-top:8px;color:var(--muted);font-size:12px}
+      .dropzone {
+        margin-top: 10px;
+        border: 2px dashed #26314a;
+        border-radius: 14px;
+        padding: 28px;
+        text-align: center;
+        background: rgba(30, 42, 70, 0.3);
+      }
+      .dropzone.drag {
+        border-color: var(--accent);
+        background: rgba(124, 58, 237, 0.08);
+      }
+      .dropzone input {
+        display: none;
+      }
+      .dropzone .big {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .meta {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 12px;
+      }
 
-    .row{display:flex;gap:10px}
-    .row>.grow{flex:1}
-    .input{width:100%;background:#0c0f17;color:var(--text);border:1px solid #1d2333;border-radius:12px;padding:12px 14px;font-size:14px}
+      .row {
+        display: flex;
+        gap: 10px;
+      }
+      .row > .grow {
+        flex: 1;
+      }
+      .input {
+        width: 100%;
+        background: #0c0f17;
+        color: var(--text);
+        border: 1px solid #1d2333;
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 14px;
+      }
 
-    .qr-preview{display:flex;align-items:center;justify-content:center;min-height:360px;background:radial-gradient(1200px 300px at 50% 0%, rgba(124,58,237,.12), transparent),linear-gradient(180deg,#121622,#0f1320);border:1px solid #1e2433;border-radius:var(--radius)}
-    canvas{background:white;border-radius:12px;padding:10px}
+      .qr-preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 360px;
+        background: radial-gradient(
+            1200px 300px at 50% 0%,
+            rgba(124, 58, 237, 0.12),
+            transparent
+          ),
+          linear-gradient(180deg, #121622, #0f1320);
+        border: 1px solid #1e2433;
+        border-radius: var(--radius);
+      }
+      canvas {
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+      }
 
-    .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0b0e14;border:1px solid #1f283a;border-radius:8px;padding:2px 6px;color:#a9b2c6;font-size:12px}
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: #0b0e14;
+        border: 1px solid #1f283a;
+        border-radius: 8px;
+        padding: 2px 6px;
+        color: #a9b2c6;
+        font-size: 12px;
+      }
 
-    .muted{color:var(--muted)}
-    footer{margin-top:26px;color:var(--muted);font-size:12px;text-align:center}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="badge">One Stop • QR</div>
-        <div>
-          <div class="title">Upload → get link → QR it</div>
-          <div class="subtitle">Accepts URL, audio (mp3/wav), and images (png/jpg/webp).</div>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn ghost" id="infoBtn">ℹ️ Info</button>
-        <a class="btn" id="themeToggle">Theme</a>
-      </div>
-    </header>
-
-    <div class="grid">
-      <section class="card">
-        <h2>Source</h2>
-        <div class="help">Choose what the QR should point to.</div>
-        <div class="tabs" role="tablist">
-          <button class="tab active" data-mode="url">URL</button>
-          <button class="tab" data-mode="audio">Audio</button>
-          <button class="tab" data-mode="image">Image</button>
-        </div>
-
-        <!-- URL MODE -->
-        <div class="mode" id="mode-url">
-          <label class="help" for="urlInput">Paste a full URL (https://…)</label>
-          <div class="row">
-            <input id="urlInput" class="input grow" placeholder="https://example.com/page" />
-            <button class="btn" id="makeFromUrl">Generate</button>
+      .muted {
+        color: var(--muted);
+      }
+      footer {
+        margin-top: 26px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">
+          <div class="badge">One Stop • QR</div>
+          <div>
+            <div class="title">Upload → get link → QR it</div>
+            <div class="subtitle">
+              Accepts URL, audio (mp3/wav), and images (png/jpg/webp).
+            </div>
           </div>
         </div>
-
-        <!-- AUDIO MODE -->
-        <div class="mode" id="mode-audio" hidden>
-          <div class="dropzone" id="audioDrop">
-            <input type="file" id="audioInput" accept="audio/*" />
-            <div class="big">Drag & drop audio here or click to choose</div>
-            <div class="meta">Max 100 MB • Tip: <span class="kbd">Ctrl/⌘+V</span> to paste</div>
-          </div>
-        </div>
-
-        <!-- IMAGE MODE -->
-        <div class="mode" id="mode-image" hidden>
-          <div class="dropzone" id="imageDrop">
-            <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp" />
-            <div class="big">Drag & drop image here or click to choose</div>
-            <div class="meta">Max 15 MB • PNG/JPG/WebP</div>
-          </div>
-        </div>
-
         <div class="actions">
-          <button class="btn ghost" id="copyLink" disabled>Copy Link</button>
-          <button class="btn ghost" id="openLink" disabled>Open Link</button>
-          <span class="muted" id="status"></span>
+          <button class="btn ghost" id="infoBtn">ℹ️ Info</button>
+          <a class="btn" id="themeToggle">Theme</a>
+        </div>
+      </header>
+
+      <div class="grid">
+        <section class="card">
+          <h2>Source</h2>
+          <div class="help">Choose what the QR should point to.</div>
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-mode="url">URL</button>
+            <button class="tab" data-mode="audio">Audio</button>
+            <button class="tab" data-mode="image">Image</button>
+          </div>
+
+          <!-- URL MODE -->
+          <div class="mode" id="mode-url">
+            <label class="help" for="urlInput"
+              >Paste a full URL (https://…)</label
+            >
+            <div class="row">
+              <input
+                id="urlInput"
+                class="input grow"
+                placeholder="https://example.com/page"
+              />
+              <button class="btn" id="makeFromUrl">Generate</button>
+            </div>
+          </div>
+
+          <!-- AUDIO MODE -->
+          <div class="mode" id="mode-audio" hidden>
+            <div class="dropzone" id="audioDrop">
+              <input type="file" id="audioInput" accept="audio/*" />
+              <div class="big">Drag & drop audio here or click to choose</div>
+              <div class="meta">
+                Max 100 MB • Tip: <span class="kbd">Ctrl/⌘+V</span> to paste
+              </div>
+            </div>
+          </div>
+
+          <!-- IMAGE MODE -->
+          <div class="mode" id="mode-image" hidden>
+            <div class="dropzone" id="imageDrop">
+              <input
+                type="file"
+                id="imageInput"
+                accept="image/png,image/jpeg,image/webp"
+              />
+              <div class="big">Drag & drop image here or click to choose</div>
+              <div class="meta">Max 15 MB • PNG/JPG/WebP</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn ghost" id="copyLink" disabled>Copy Link</button>
+            <button class="btn ghost" id="openLink" disabled>Open Link</button>
+            <span class="muted" id="status"></span>
+          </div>
+        </section>
+
+        <aside class="card">
+          <h2>QR Preview</h2>
+          <div class="help">SVG or PNG. Scan now to test.</div>
+          <div class="qr-preview" id="qrStage">
+            <canvas id="qrcanvas" width="320" height="320"></canvas>
+          </div>
+          <div class="actions">
+            <button class="btn" id="downloadPng">Download PNG</button>
+            <button class="btn ghost" id="downloadSvg">Download SVG</button>
+          </div>
+        </aside>
+      </div>
+
+      <section class="card" style="margin-top: 18px">
+        <h2>Embed Preview</h2>
+        <div class="help">
+          Once uploaded, use the link anywhere. For audio uploads we show a
+          simple player preview.
+        </div>
+        <div id="embedPreview" style="margin-top: 8px"></div>
+        <div class="actions">
+          <button class="btn ghost" id="copyEmbed" disabled>Copy Code</button>
         </div>
       </section>
 
-      <aside class="card">
-        <h2>QR Preview</h2>
-        <div class="help">SVG or PNG. Scan now to test.</div>
-        <div class="qr-preview" id="qrStage">
-          <canvas id="qrcanvas" width="320" height="320"></canvas>
+      <footer>
+        <div>
+          Files are stored in Backblaze B2. Links are public. Please avoid
+          sensitive data.
         </div>
-        <div class="actions">
-          <button class="btn" id="downloadPng">Download PNG</button>
-          <button class="btn ghost" id="downloadSvg">Download SVG</button>
-        </div>
-      </aside>
+      </footer>
     </div>
 
-    <section class="card" style="margin-top:18px">
-      <h2>Embed Preview</h2>
-      <div class="help">Once uploaded, use the link anywhere. For audio uploads we show a simple player preview.</div>
-      <div id="embedPreview" style="margin-top:8px"></div>
-      <div class="actions">
-        <button class="btn ghost" id="copyEmbed" disabled>Copy Code</button>
-      </div>
-    </section>
+    <!-- QR libs (vanilla, lightweight) -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-    <footer>
-      <div>Files are stored in Backblaze B2. Links are public. Please avoid sensitive data.</div>
-    </footer>
-  </div>
+        const tabs = $$(".tab");
+        const modes = {
+          url: $("#mode-url"),
+          audio: $("#mode-audio"),
+          image: $("#mode-image"),
+        };
+        const statusEl = $("#status");
+        const state = { currentMode: "url", link: "" };
 
-  <!-- QR libs (vanilla, lightweight) -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script>
-    const $ = (sel) => document.querySelector(sel);
-    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+        // --- Tabs ---
+        tabs.forEach((t) =>
+          t.addEventListener("click", () => {
+            tabs.forEach((x) => x.classList.remove("active"));
+            t.classList.add("active");
+            Object.values(modes).forEach((m) => (m.hidden = true));
+            state.currentMode = t.dataset.mode;
+            modes[state.currentMode].hidden = false;
+            updateEmbed("");
+            enableLinkActions(false);
+            drawQR("https://example.com");
+          })
+        );
 
-    const tabs = $$('.tab');
-    const modes = { url: $('#mode-url'), audio: $('#mode-audio'), image: $('#mode-image') };
-    const statusEl = $('#status');
-    const state = { currentMode: 'url', link: '' };
+        // --- URL mode ---
+        $("#makeFromUrl").addEventListener("click", () => {
+          const url = $("#urlInput").value.trim();
+          if (!/^https?:\/\//i.test(url)) {
+            return toast("Enter a valid URL starting with http(s)://");
+          }
+          state.link = url;
+          afterLinkReady(url, { kind: "url" });
+        });
 
-    // --- Tabs ---
-    tabs.forEach(t => t.addEventListener('click', () => {
-      tabs.forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      Object.values(modes).forEach(m => m.hidden = true);
-      state.currentMode = t.dataset.mode;
-      modes[state.currentMode].hidden = false;
-      updateEmbed('');
-      enableLinkActions(false);
-      drawQR('https://example.com');
-    }));
-
-    // --- URL mode ---
-    $('#makeFromUrl').addEventListener('click', () => {
-      const url = $('#urlInput').value.trim();
-      if (!/^https?:\/\//i.test(url)) { return toast('Enter a valid URL starting with http(s)://'); }
-      state.link = url; afterLinkReady(url, { kind: 'url' });
-    });
-
-    // --- Dropzones ---
-    function wireDrop(dropEl, inputEl, accept) {
-      const onFiles = async (files) => {
-        const file = files[0]; if (!file) return;
-        if (accept && !accept.split(',').some(t => file.type.includes(t.replace('image/','').replace('audio/','')))) {
-          return toast('Unsupported file type.');
+        // --- Dropzones ---
+        function wireDrop(dropEl, inputEl, accept) {
+          const onFiles = async (files) => {
+            const file = files[0];
+            if (!file) return;
+            if (
+              accept &&
+              !accept
+                .split(",")
+                .some((t) =>
+                  file.type.includes(
+                    t.replace("image/", "").replace("audio/", "")
+                  )
+                )
+            ) {
+              return toast("Unsupported file type.");
+            }
+            await upload(file);
+          };
+          dropEl.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropEl.classList.add("drag");
+          });
+          dropEl.addEventListener("dragleave", () =>
+            dropEl.classList.remove("drag")
+          );
+          dropEl.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropEl.classList.remove("drag");
+            onFiles(e.dataTransfer.files);
+          });
+          dropEl.addEventListener("click", () => inputEl.click());
+          inputEl.addEventListener("change", (e) => onFiles(e.target.files));
+          window.addEventListener("paste", (e) => {
+            if (
+              !dropEl.closest(".mode").hidden &&
+              e.clipboardData.files.length
+            ) {
+              onFiles(e.clipboardData.files);
+            }
+          });
         }
-        await upload(file);
-      };
-      dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('drag'); });
-      dropEl.addEventListener('dragleave', () => dropEl.classList.remove('drag'));
-      dropEl.addEventListener('drop', e => { e.preventDefault(); dropEl.classList.remove('drag'); onFiles(e.dataTransfer.files); });
-      dropEl.addEventListener('click', () => inputEl.click());
-      inputEl.addEventListener('change', e => onFiles(e.target.files));
-      window.addEventListener('paste', (e) => {
-        if (!dropEl.closest('.mode').hidden && e.clipboardData.files.length) {
-          onFiles(e.clipboardData.files);
+        wireDrop($("#audioDrop"), $("#audioInput"), "audio");
+        wireDrop($("#imageDrop"), $("#imageInput"), "image");
+
+        // --- Upload to backend (Render) which stores to Backblaze B2 ---
+        async function upload(file) {
+          try {
+            status("Uploading…");
+            const form = new FormData();
+            form.append("file", file);
+            form.append("kind", state.currentMode);
+            const res = await fetch(`${window.__API_BASE__ || ""}/api/upload`, {
+              method: "POST",
+              body: form,
+            });
+            if (!res.ok) throw new Error("Upload failed");
+            const { publicUrl } = await res.json();
+            state.link = publicUrl;
+            afterLinkReady(publicUrl, {
+              kind: state.currentMode,
+              filename: file.name,
+            });
+          } catch (e) {
+            console.error(e);
+            toast("Upload failed.");
+            status("");
+          }
         }
+
+        // --- After link available ---
+        function afterLinkReady(url, meta) {
+          drawQR(url);
+          updateEmbed(url, meta);
+          enableLinkActions(true);
+          status("Ready");
+        }
+
+        function drawQR(text) {
+          const canvas = document.getElementById("qrcanvas");
+          QRCode.toCanvas(
+            canvas,
+            text,
+            {
+              width: 320,
+              margin: 1,
+              color: { dark: "#000000", light: "#ffffff" },
+            },
+            (err) => {
+              if (err) console.error(err);
+            }
+          );
+        }
+
+        function updateEmbed(url, meta = {}) {
+          const box = $("#embedPreview");
+          box.innerHTML = "";
+          if (!url) {
+            $("#copyEmbed").disabled = true;
+            return;
+          }
+          let html = "";
+          if (meta.kind === "audio") {
+            html = `<audio controls preload="metadata" style="width:100%"><source src="${url}" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
+          } else if (meta.kind === "image") {
+            html = `<img src="${url}" alt="QR asset" style="max-width:100%;height:auto;border-radius:12px;"/>`;
+          } else {
+            html = `<a href="${url}" target="_blank" rel="noopener">${url}</a>`;
+          }
+          box.innerHTML = html;
+          $("#copyEmbed").disabled = false;
+          $("#copyEmbed").dataset.code = html;
+        }
+
+        function enableLinkActions(on) {
+          $("#copyLink").disabled = !on;
+          $("#openLink").disabled = !on;
+        }
+
+        // --- Buttons ---
+        $("#copyLink").onclick = () => copy(state.link);
+        $("#openLink").onclick = () =>
+          window.open(state.link, "_blank", "noopener");
+        $("#copyEmbed").onclick = (e) =>
+          copy(e.currentTarget.dataset.code || "");
+
+        $("#downloadPng").onclick = () => {
+          const data = document
+            .getElementById("qrcanvas")
+            .toDataURL("image/png");
+          downloadDataUrl(data, "qr.png");
+        };
+        $("#downloadSvg").onclick = async () => {
+          const svg = await QRCode.toString(
+            state.link || "https://example.com",
+            { type: "svg", margin: 1 }
+          );
+          const blob = new Blob([svg], { type: "image/svg+xml" });
+          const url = URL.createObjectURL(blob);
+          const a = Object.assign(document.createElement("a"), {
+            href: url,
+            download: "qr.svg",
+          });
+          a.click();
+          URL.revokeObjectURL(url);
+        };
+
+        $("#themeToggle").onclick = () =>
+          document.body.classList.toggle("light");
+
+        function downloadDataUrl(dataUrl, name) {
+          const a = document.createElement("a");
+          a.href = dataUrl;
+          a.download = name;
+          a.click();
+        }
+        async function copy(text) {
+          try {
+            await navigator.clipboard.writeText(text);
+            toast("Copied");
+          } catch {
+            toast("Copy failed");
+          }
+        }
+        function status(msg) {
+          statusEl.textContent = msg;
+        }
+        function toast(msg) {
+          statusEl.textContent = msg;
+          setTimeout(() => status(""), 1800);
+        }
+
+        // Draw placeholder QR on load
+        drawQR("https://example.com");
       });
-    }
-    wireDrop($('#audioDrop'), $('#audioInput'), 'audio');
-    wireDrop($('#imageDrop'), $('#imageInput'), 'image');
-
-    // --- Upload to backend (Render) which stores to Backblaze B2 ---
-    async function upload(file) {
-      try {
-        status('Uploading…');
-        const form = new FormData();
-        form.append('file', file);
-        form.append('kind', state.currentMode);
-        const res = await fetch(`${window.__API_BASE__ || ''}/api/upload`, { method: 'POST', body: form });
-        if (!res.ok) throw new Error('Upload failed');
-        const { publicUrl } = await res.json();
-        state.link = publicUrl;
-        afterLinkReady(publicUrl, { kind: state.currentMode, filename: file.name });
-      } catch (e) {
-        console.error(e); toast('Upload failed.'); status('');
-      }
-    }
-
-    // --- After link available ---
-    function afterLinkReady(url, meta){
-      drawQR(url);
-      updateEmbed(url, meta);
-      enableLinkActions(true);
-      status('Ready');
-    }
-
-    function drawQR(text){
-      const canvas = document.getElementById('qrcanvas');
-      QRCode.toCanvas(canvas, text, { width: 320, margin: 1, color: { dark: '#000000', light: '#ffffff' } }, (err)=>{
-        if (err) console.error(err);
-      });
-    }
-
-    function updateEmbed(url, meta={}){
-      const box = $('#embedPreview');
-      box.innerHTML = '';
-      if (!url) { $('#copyEmbed').disabled = true; return; }
-      let html = '';
-      if (meta.kind === 'audio') {
-        html = `<audio controls preload="metadata" style="width:100%"><source src="${url}" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
-      } else if (meta.kind === 'image') {
-        html = `<img src="${url}" alt="QR asset" style="max-width:100%;height:auto;border-radius:12px;"/>`;
-      } else {
-        html = `<a href="${url}" target="_blank" rel="noopener">${url}</a>`;
-      }
-      box.innerHTML = html;
-      $('#copyEmbed').disabled = false;
-      $('#copyEmbed').dataset.code = html;
-    }
-
-    function enableLinkActions(on){
-      $('#copyLink').disabled = !on; $('#openLink').disabled = !on;
-    }
-
-    // --- Buttons ---
-    $('#copyLink').onclick = () => copy(state.link);
-    $('#openLink').onclick = () => window.open(state.link, '_blank', 'noopener');
-    $('#copyEmbed').onclick = (e) => copy(e.currentTarget.dataset.code || '');
-
-    $('#downloadPng').onclick = () => {
-      const data = document.getElementById('qrcanvas').toDataURL('image/png');
-      downloadDataUrl(data, 'qr.png');
-    };
-    $('#downloadSvg').onclick = async () => {
-      const svg = await QRCode.toString(state.link || 'https://example.com', { type: 'svg', margin: 1 });
-      const blob = new Blob([svg], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      const a = Object.assign(document.createElement('a'), { href: url, download: 'qr.svg' });
-      a.click(); URL.revokeObjectURL(url);
-    };
-
-    $('#themeToggle').onclick = () => document.body.classList.toggle('light');
-
-    function downloadDataUrl(dataUrl, name){
-      const a = document.createElement('a'); a.href = dataUrl; a.download = name; a.click();
-    }
-    async function copy(text){
-      try{ await navigator.clipboard.writeText(text); toast('Copied'); }catch{ toast('Copy failed'); }
-    }
-    function status(msg){ statusEl.textContent = msg; }
-    function toast(msg){ statusEl.textContent = msg; setTimeout(()=> status(''), 1800); }
-
-    // Draw placeholder QR on load
-    drawQR('https://example.com');
-  </script>
-  <script>
-    // Set this at runtime via an env rewrite or inline script on Vercel if your API lives elsewhere
-    window.__API_BASE__ = 'https://qr-generator-ffka.onrender.com';
-  </script>
-</body>
+    </script>
+    <script>
+      // Set this at runtime via an env rewrite or inline script on Vercel if your API lives elsewhere
+      window.__API_BASE__ = "https://qr-generator-ffka.onrender.com";
+    </script>
+  </body>
 </html>
